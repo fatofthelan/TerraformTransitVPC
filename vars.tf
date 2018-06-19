@@ -39,4 +39,4 @@ variable "transit_vpc_cidr_prefix" {
 
 
 /* Discover and create a list of the Availability Zones for our region. */
-data "aws_availability_zones" "all" {}
+data "aws_availability_zones" "available" {}
