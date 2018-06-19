@@ -27,7 +27,7 @@ resource "aws_vpc" "transit_vpc" {
 resource "aws_subnet" "transit_vpc_untrust_subnet_az1" {
   vpc_id            = "${aws_vpc.transit_vpc.id}"
   cidr_block        = "${join("", list("${var.transit_vpc_cidr_prefix}", "1.0/24"))}"
-  availability_zone = ["${data.aws_availability_zones.all.names}"]
+  availability_zone = "${data.aws_availability_zones.all.names}"
 
   tags {
     "Name"    = "transit-untrust-subnet-az1"
@@ -39,7 +39,7 @@ resource "aws_subnet" "transit_vpc_untrust_subnet_az1" {
 resource "aws_subnet" "transit_vpc_untrust_subnet_az2" {
   vpc_id            = "${aws_vpc.transit_vpc.id}"
   cidr_block        = "${join("", list("${var.transit_vpc_cidr_prefix}", "2.0/24"))}"
-  availability_zone = ["${data.aws_availability_zones.all.names}"]
+  availability_zone = "${data.aws_availability_zones.all.names}"
 
   tags {
     "Name"    = "transit-untrust-subnet-az2"
@@ -51,7 +51,7 @@ resource "aws_subnet" "transit_vpc_untrust_subnet_az2" {
 resource "aws_subnet" "transit_vpc_trust_subnet_az1" {
   vpc_id            = "${aws_vpc.transit_vpc.id}"
   cidr_block        = "${join("", list("${var.transit_vpc_cidr_prefix}", "10.0/24"))}"
-  availability_zone = ["${data.aws_availability_zones.all.names}"]
+  availability_zone = "${data.aws_availability_zones.all.names}"
 
   tags {
     "Name"    = "transit-trust-subnet-az1"
@@ -63,7 +63,7 @@ resource "aws_subnet" "transit_vpc_trust_subnet_az1" {
 resource "aws_subnet" "transit_vpc_trust_subnet_az2" {
   vpc_id            = "${aws_vpc.transit_vpc.id}"
   cidr_block        = "${join("", list("${var.transit_vpc_cidr_prefix}", "20.0/24"))}"
-  availability_zone = ["${data.aws_availability_zones.all.names}"]
+  availability_zone = "${data.aws_availability_zones.all.names}"
 
   tags {
     "Name"    = "transit-trust-subnet-az2"
