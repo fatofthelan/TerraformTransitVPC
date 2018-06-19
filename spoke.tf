@@ -100,3 +100,9 @@ resource "aws_vpn_connection" "spoke_to_transit_fw2" {
     Name = "${var.spoke_name}_to_transit_fw2"
   }
 }
+
+/* Propagate our VGW route to the route table */
+resource "aws_vpn_gateway_route_propagation" "spoke_route_propagation" {
+  vpn_gateway_id = "${aws_vpn_gateway.spoke_vpn_gateway.id}"
+  route_table_id = "${aws_route_table.spoke_route_table.id}"
+}
