@@ -5,6 +5,7 @@ the new spoke you want to create. */
 variable "spoke_name" {
   default = "spoke"
 }
+
 variable "spoke_vpc_cidr_prefix" {
   default = "10.11."
 }
@@ -43,7 +44,6 @@ resource "aws_route_table_association" "spoke_assc_subnet_az1" {
   subnet_id      = "${aws_subnet.spoke_vpc_subnet_az1.id}"
   route_table_id = "${aws_route_table.spoke_route_table.id}"
 }
-
 
 /* VPN Section */
 

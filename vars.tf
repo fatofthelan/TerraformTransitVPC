@@ -17,6 +17,7 @@ variable "transit_key_pair" {
 variable "transit_key_pair_public" {
   default = "keys/transit-vpc-key.pub"
 }
+
 /* Using the AMI for us-west-2
 https://www.paloaltonetworks.com/documentation/global/compatibility-matrix/vm-series-firewalls/aws-cft-amazon-machine-images-ami-list/images-for-pan-os-8-1#id1849DL00W6W
 */
@@ -36,7 +37,6 @@ variable "transit_vpc_cidr_block" {
 variable "transit_vpc_cidr_prefix" {
   default = "10.10."
 }
-
 
 /* Discover and create a list of the Availability Zones for our region. */
 data "aws_availability_zones" "available" {}

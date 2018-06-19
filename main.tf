@@ -7,7 +7,7 @@ provider "aws" {
 
 /* Create a keypair to use for our instances */
 resource "aws_key_pair" "transit_vpc_key" {
-  key_name = "transit_vpc_key"
+  key_name   = "transit_vpc_key"
   public_key = "${file(var.transit_key_pair_public)}"
 }
 
@@ -118,7 +118,6 @@ resource "aws_eip" "firewall_2_untrust_public_ip" {
     "Name" = "firewall_2_untrust_ip"
   }
 }
-
 
 /* Associate the Elastic IPs to the internal network interfaces */
 resource "aws_eip_association" "firewall_1_management_eip_association" {
@@ -248,7 +247,6 @@ resource "aws_network_interface" "firewall_2_trust_network_interface" {
   }
 }
 
-
 /* Security group to allow all traffic */
 resource "aws_security_group" "allow_all_security_group" {
   name        = "allow_all_security_group"
@@ -272,49 +270,51 @@ resource "aws_security_group" "allow_all_security_group" {
 
 /* Create S3 bucket for bootstrap files */
 resource "aws_s3_bucket" "bootstrap_bucket" {
-  bucket = "${var.bootstrap_bucket}"
-  acl    = "private"
+  bucket        = "${var.bootstrap_bucket}"
+  acl           = "private"
   force_destroy = true
 
   tags {
     Name = "Bootstrap Bucket"
   }
 }
+
 /* Upload bootstrap files to the S3 Bucket above */
 resource "aws_s3_bucket_object" "bootstrap_xml" {
-    bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
-    acl    = "private"
-    key    = "config/bootstrap.xml"
-    source = "bootstrap_files/bootstrap.xml"
+  bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
+  acl    = "private"
+  key    = "config/bootstrap.xml"
+  source = "bootstrap_files/bootstrap.xml"
 }
 
 resource "aws_s3_bucket_object" "init-cft_txt" {
-    bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
-    acl    = "private"
-    key    = "config/init-cfg.txt"
-    source = "bootstrap_files/init-cfg.txt"
+  bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
+  acl    = "private"
+  key    = "config/init-cfg.txt"
+  source = "bootstrap_files/init-cfg.txt"
 }
 
 resource "aws_s3_bucket_object" "software" {
-    bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
-    acl    = "private"
-    key    = "software/"
-    source = "/dev/null"
+  bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
+  acl    = "private"
+  key    = "software/"
+  source = "/dev/null"
 }
 
 resource "aws_s3_bucket_object" "license" {
-    bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
-    acl    = "private"
-    key    = "license/"
-    source = "/dev/null"
+  bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
+  acl    = "private"
+  key    = "license/"
+  source = "/dev/null"
 }
 
 resource "aws_s3_bucket_object" "content" {
-    bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
-    acl    = "private"
-    key    = "content/"
-    source = "/dev/null"
+  bucket = "${aws_s3_bucket.bootstrap_bucket.id}"
+  acl    = "private"
+  key    = "content/"
+  source = "/dev/null"
 }
+
 /* This section creates the compute elements of the transit VPC */
 
 /* Create the first firewall */
@@ -353,7 +353,6 @@ resource "aws_instance" "palo_alto_fw_1" {
 
   user_data = "${base64encode(join("", list("vmseries-bootstrap-aws-s3bucket=", var.bootstrap_bucket)))}"
 }
-
 
 /* Create the second firewall */
 resource "aws_instance" "palo_alto_fw_2" {
