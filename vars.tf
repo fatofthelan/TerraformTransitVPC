@@ -36,3 +36,7 @@ variable "transit_vpc_cidr_block" {
 variable "transit_vpc_cidr_prefix" {
   default = "10.10."
 }
+
+
+/* Discover and create a list of the Availability Zones for our region. */
+data "aws_availability_zones" "all" {}

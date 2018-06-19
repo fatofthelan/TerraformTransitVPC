@@ -25,7 +25,7 @@ resource "aws_vpc" "spoke_vpc" {
 resource "aws_subnet" "spoke_vpc_subnet_az1" {
   vpc_id            = "${aws_vpc.spoke_vpc.id}"
   cidr_block        = "${join("", list("${var.spoke_vpc_cidr_prefix}", "1.0/24"))}"
-  availability_zone = "${var.availability_zone}"
+  availability_zone = ["${data.aws_availability_zones.all.names}"]
 
   tags {
     "Name"    = "${var.spoke_name}-subnet-az1"
@@ -71,7 +71,7 @@ resource "aws_customer_gateway" "spoke_customer_gateway_fw2" {
 /* Create the Virtual Private Gateway and VPN to the Transit VPC */
 resource "aws_vpn_gateway" "spoke_vpn_gateway" {
   vpc_id            = "${aws_vpc.spoke_vpc.id}"
-  availability_zone = "${var.availability_zone}"
+  availability_zone = ["${data.aws_availability_zones.all.names}"]
 
   tags {
     Name = "${var.spoke_name}_vpn_gateway"
