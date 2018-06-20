@@ -323,7 +323,7 @@ resource "aws_instance" "palo_alto_fw_1" {
   iam_instance_profile                 = "${aws_iam_instance_profile.firewall_bootstrap_profile.name}"
   instance_initiated_shutdown_behavior = "stop"
   ebs_optimized                        = true
-  ami                                  = "${var.palo_alto_fw_ami}"
+  ami                                  = "${var.palo_alto_fw_ami[var.aws_region]}"
   instance_type                        = "m4.xlarge"
 
   ebs_block_device {
@@ -335,6 +335,10 @@ resource "aws_instance" "palo_alto_fw_1" {
 
   key_name   = "transit_vpc_key"
   monitoring = false
+
+  lifecycle {
+    ignore_changes = ["ebs_block_device"]
+  }
 
   network_interface {
     device_index         = 0
@@ -360,8 +364,10 @@ resource "aws_instance" "palo_alto_fw_2" {
   iam_instance_profile                 = "${aws_iam_instance_profile.firewall_bootstrap_profile.name}"
   instance_initiated_shutdown_behavior = "stop"
   ebs_optimized                        = true
-  ami                                  = "${var.palo_alto_fw_ami}"
-  instance_type                        = "m4.xlarge"
+
+  //  ami                                  = "${var.palo_alto_fw_ami}"
+  ami           = "${var.palo_alto_fw_ami[var.aws_region]}"
+  instance_type = "m4.xlarge"
 
   ebs_block_device {
     device_name           = "/dev/xvda"
@@ -372,6 +378,10 @@ resource "aws_instance" "palo_alto_fw_2" {
 
   key_name   = "transit_vpc_key"
   monitoring = false
+
+  lifecycle {
+    ignore_changes = ["ebs_block_device"]
+  }
 
   network_interface {
     device_index         = 0
