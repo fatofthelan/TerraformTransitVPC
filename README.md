@@ -1,14 +1,14 @@
-###AWS Transit VPC (and Spoke VPC) Terraform Template###
+### AWS Transit VPC (and Spoke VPC) Terraform Template
 This is the first draft of the AWS Transit VPC/Subscribing VPC Terraform templates.
 
-####This Terraform template will:####
+#### This Terraform template will:
 - Create the Transit VPC and Subscribing (Spokes) VPCs.
 - Create and populate the S3 Bucket used for bootstrapping the VM-Series firewalls.
 - Spin up 2 Palo Alto Networks VM-Series Firewalls in the Transit VPC, one per AZ.
 - Configure VPNs between the Spoke VPC and the VM-Series Firewalls.
 - Configure BGP to add routes for the Spoke VPCs.
 
-####To use this terraform template, you will need to do the following:####
+#### To use this terraform template, you will need to do the following:
 - Download and install terraform
 - Change any variables in the __vars.tf__ file to suit your needs.
 - Define a unique name for the "bootstrap_bucket" variable in the __vars.tf__ file.
@@ -32,6 +32,6 @@ This is the first draft of the AWS Transit VPC/Subscribing VPC Terraform templat
   the PSKs from the Terraform output. (I'll automate this in v2.)
 - Commit and you should all of the VPN tunnels become active as well as their BGP entries.
 
-####NOTES:####
+#### NOTES:
 - The username and password from the bootstrap.xml is __paloalto__ / __in*4ksh8JN2kdh__ (be sure to change this once your FWs come up!)
 - The AMI used by default is for the Pay As You Go instance of PANOS 8.1. Change the `"palo_alto_fw_ami"` variable to suit your needs.
