@@ -1,7 +1,9 @@
 /* This template creates a spoke VPC that will connect to the transit VPC
 via VPN. To use or create multiple spokes, simply duplicate this file for
 each desired spoke and change the "spoke_name" variable to the name of
-the new spoke you want to create. */
+the new spoke you want to create and find/replace "spoke" with with the
+name of the new spoke, "prod" for example. */
+
 variable "spoke_name" {
   default = "spoke"
 }

@@ -32,11 +32,6 @@ variable "palo_alto_fw_ami" {
   }
 }
 
-/*
-variable "availability_zone" {
-  default = "us-west-2a"
-}
-*/
 variable "transit_key_pair" {
   default = "transit-vpc-key"
 }
