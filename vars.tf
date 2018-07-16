@@ -1,6 +1,4 @@
-variable "AWS_ACCESS_KEY" {}
-
-variable "AWS_SECRET_KEY" {}
+/* Transit VPC variables. Adjust as desired. */
 
 variable "aws_region" {
   default = "us-west-2"

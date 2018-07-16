@@ -1,2 +1,2 @@
-Create a keypair using "ssh-keygen -f transit-vpc-key".
-If you use a differnet key name or wish to use existing keys, update the "transit_key_pair_public" variable in the vars.tf file.
+Create a keypair using "ssh-keygen -f transit-vpc-key -t rsa -N ''".
+If you use a different key name or wish to use existing keys, update the "transit_key_pair_public" variable in the vars.tf file.

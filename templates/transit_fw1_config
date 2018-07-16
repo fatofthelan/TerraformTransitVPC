@@ -466,7 +466,7 @@
                         </bfd>
                         <max-prefixes>5000</max-prefixes>
                         <enable>yes</enable>
-                        <peer-as>7224</peer-as>
+                        <peer-as>${tunnel1_peer_as}</peer-as>
                         <enable-mp-bgp>no</enable-mp-bgp>
                         <address-family-identifier>ipv4</address-family-identifier>
                         <enable-sender-side-loop-detection>yes</enable-sender-side-loop-detection>
@@ -506,7 +506,7 @@
                         </bfd>
                         <max-prefixes>5000</max-prefixes>
                         <enable>yes</enable>
-                        <peer-as>7224</peer-as>
+                        <peer-as>${tunnel2_peer_as}</peer-as>
                         <enable-mp-bgp>no</enable-mp-bgp>
                         <address-family-identifier>ipv4</address-family-identifier>
                         <enable-sender-side-loop-detection>yes</enable-sender-side-loop-detection>

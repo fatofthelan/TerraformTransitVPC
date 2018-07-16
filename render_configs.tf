@@ -18,6 +18,8 @@ data "template_file" "transit_fw1_config" {
     tunnel2_vgw_outside_address = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel2_address}"
     tunnel1_preshared_key       = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel1_preshared_key}"
     tunnel2_preshared_key       = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel2_preshared_key}"
+    tunnel1_peer_as             = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel1_bgp_asn}"
+    tunnel2_peer_as             = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel2_bgp_asn}"
   }
 }
 
@@ -35,6 +37,8 @@ data "template_file" "transit_fw2_config" {
     tunnel2_vgw_outside_address = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel2_address}"
     tunnel1_preshared_key       = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel1_preshared_key}"
     tunnel2_preshared_key       = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel2_preshared_key}"
+    tunnel1_peer_as             = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel1_bgp_asn}"
+    tunnel2_peer_as             = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel2_bgp_asn}"
   }
 }
 
@@ -47,12 +51,3 @@ resource "local_file" "transit_fw2_config" {
   content  = "${data.template_file.transit_fw2_config.rendered}"
   filename = "templates/transit_fw2_config.xml"
 }
-
-/*
-  provisioner "file" {
-    content     = "${data.template_file.transit_fw1_config.rendered}"
-    destination = "templates/transit_fw1_config.xml"
-  }
-
-  */
-

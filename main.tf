@@ -1,10 +1,3 @@
-# Configure the AWS Provider
-provider "aws" {
-  access_key = "${var.AWS_ACCESS_KEY}"
-  secret_key = "${var.AWS_SECRET_KEY}"
-  region     = "${var.aws_region}"
-}
-
 /* Create a keypair to use for our instances */
 resource "aws_key_pair" "transit_vpc_key" {
   key_name   = "transit_vpc_key"
@@ -365,7 +358,6 @@ resource "aws_instance" "palo_alto_fw_2" {
   instance_initiated_shutdown_behavior = "stop"
   ebs_optimized                        = true
 
-  //  ami                                  = "${var.palo_alto_fw_ami}"
   ami           = "${var.palo_alto_fw_ami[var.aws_region]}"
   instance_type = "m4.xlarge"
 
