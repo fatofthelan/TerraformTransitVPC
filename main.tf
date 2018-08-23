@@ -136,6 +136,19 @@ resource "aws_eip_association" "firewall_2_untrust_eip_association" {
 /* Create the transit VPC route table */
 resource "aws_route_table" "transit_route_table" {
   vpc_id = "${aws_vpc.transit_vpc.id}"
+
+  tags {
+    "Name" = "Transit-Untrust"
+  }
+}
+
+/* Create the transit VPC trust route table */
+resource "aws_route_table" "trust_route_table" {
+  vpc_id = "${aws_vpc.transit_vpc.id}"
+
+  tags {
+    "Name" = "Transit-Trust"
+  }
 }
 
 /* Create the default route for the transit VPC, points to the IGW */
@@ -143,6 +156,13 @@ resource "aws_route" "transit_default_route" {
   route_table_id         = "${aws_route_table.transit_route_table.id}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "${aws_internet_gateway.transit_internet_gateway.id}"
+}
+
+/* Create the default route for the trust network that points to the FW's eth2 (Trust zone) */
+resource "aws_route" "trust_default_route" {
+  route_table_id         = "${aws_route_table.trust_route_table.id}"
+  destination_cidr_block = "0.0.0.0/0"
+  network_interface_id   = "${aws_network_interface.firewall_1_trust_network_interface.id}"
 }
 
 /* Associate transit subnets with transit routes */
@@ -156,14 +176,15 @@ resource "aws_route_table_association" "transit_assc_untrust_subnet_az2" {
   route_table_id = "${aws_route_table.transit_route_table.id}"
 }
 
-resource "aws_route_table_association" "transit_assc_trust_subnet_az1" {
+/* Associate transit subnets with transit routes */
+resource "aws_route_table_association" "trust_assc_trust_subnet_az1" {
   subnet_id      = "${aws_subnet.transit_vpc_trust_subnet_az1.id}"
-  route_table_id = "${aws_route_table.transit_route_table.id}"
+  route_table_id = "${aws_route_table.trust_route_table.id}"
 }
 
-resource "aws_route_table_association" "transit_assc_trust_subnet_az2" {
+resource "aws_route_table_association" "trust_assc_trust_subnet_az2" {
   subnet_id      = "${aws_subnet.transit_vpc_trust_subnet_az2.id}"
-  route_table_id = "${aws_route_table.transit_route_table.id}"
+  route_table_id = "${aws_route_table.trust_route_table.id}"
 }
 
 /* Network interfaces for firewall 1 */
@@ -333,6 +354,10 @@ resource "aws_instance" "palo_alto_fw_1" {
     ignore_changes = ["ebs_block_device"]
   }
 
+  tags {
+    "Name" = "Transit-FW01"
+  }
+
   network_interface {
     device_index         = 0
     network_interface_id = "${aws_network_interface.firewall_1_management_network_interface.id}"
@@ -373,6 +398,10 @@ resource "aws_instance" "palo_alto_fw_2" {
 
   lifecycle {
     ignore_changes = ["ebs_block_device"]
+  }
+
+  tags {
+    "Name" = "Transit-FW02"
   }
 
   network_interface {

@@ -727,6 +727,9 @@
               <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFDdnZzYWpBUUJ5a1JwZUN6S3E0Nmc1cW5MK01UM3VObmxNUVpiaUFlNVFQSUF6RU52Y2I3RjNMMDdPRjVuZUd5Yk1aNW1qakx6UDVETU1LcFV2SHhKRW1sK1EyTXh2THBRcUVsYkhZK1lDbElSQ2hVSHQ0K1ZrVjdieEt6Mm1BRmNhVElROFhiWTM2NDZQeHpIcnhtNG9tN3crTnZnbFlMSlBWeHY0ZTYvcG5YNUgwWFh0Wk1IVWtFaWFvYjNsb2MzNHJDbkN2VlhjL3BzV3J4bWlxR1FRKzdsOVRGRk9OMWpLY1JSQ1pmN0lFUDlsbVdaTmpab2x4RStXL0FNdjBrVWNGU2E0QmZYN0U0RWg4VHVuVVUvMWpFRGI1ZWxsVHdpalprUDB4OW9FSG9GY01wNktCOUZHbm82dTVwTWRFbjM4M0x2RElxOWRVWWJqK001bTdFQ0IgdHJhbnNpdF92cGNfa2V5</public-key>
             </initcfg>
           </management>
+          <aws-cloudwatch>
+            <enabled>yes</enabled>
+          </aws-cloudwatch>
         </setting>
       </deviceconfig>
       <vsys>
@@ -738,8 +741,6 @@
               <network>
                 <layer3>
                   <member>ethernet1/1</member>
-                  <member>tunnel.1</member>
-                  <member>tunnel.2</member>
                 </layer3>
               </network>
             </entry>
@@ -750,11 +751,242 @@
                 </layer3>
               </network>
             </entry>
+            <entry name="Spoke">
+              <network>
+                <layer3>
+                  <member>tunnel.1</member>
+                  <member>tunnel.2</member>
+                </layer3>
+              </network>
+            </entry>
           </zone>
-          <service/>
+          <service>
+            <entry name="Bastion-Host-SSH">
+              <protocol>
+                <tcp>
+                  <port>221</port>
+                  <override>
+                    <no/>
+                  </override>
+                </tcp>
+              </protocol>
+            </entry>
+          </service>
           <service-group/>
           <schedule/>
-          <rulebase/>
+          <rulebase>
+            <security>
+              <rules>
+                <entry name="SSH to Bastion Host">
+                  <to>
+                    <member>Trust</member>
+                  </to>
+                  <from>
+                    <member>Untrust</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>10.10.1.20</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>ssh</member>
+                  </application>
+                  <service>
+                    <member>Bastion-Host-SSH</member>
+                  </service>
+                  <hip-profiles>
+                    <member>any</member>
+                  </hip-profiles>
+                  <action>allow</action>
+                  <log-start>no</log-start>
+                </entry>
+                <entry name="Trust to Untrust">
+                  <to>
+                    <member>Untrust</member>
+                  </to>
+                  <from>
+                    <member>Trust</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <service>
+                    <member>any</member>
+                  </service>
+                  <hip-profiles>
+                    <member>any</member>
+                  </hip-profiles>
+                  <action>allow</action>
+                  <log-start>yes</log-start>
+                </entry>
+                <entry name="Trust to Spoke">
+                  <to>
+                    <member>Spoke</member>
+                  </to>
+                  <from>
+                    <member>Trust</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <hip-profiles>
+                    <member>any</member>
+                  </hip-profiles>
+                  <action>allow</action>
+                </entry>
+                <entry name="Spoke to Trust">
+                  <to>
+                    <member>Trust</member>
+                  </to>
+                  <from>
+                    <member>Spoke</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <hip-profiles>
+                    <member>any</member>
+                  </hip-profiles>
+                  <action>allow</action>
+                </entry>
+                <entry name="Spoke to Untrust">
+                  <to>
+                    <member>Untrust</member>
+                  </to>
+                  <from>
+                    <member>Spoke</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <hip-profiles>
+                    <member>any</member>
+                  </hip-profiles>
+                  <action>allow</action>
+                </entry>
+              </rules>
+            </security>
+            <nat>
+              <rules>
+                <entry name="SSH to Bastion Host">
+                  <destination-translation>
+                    <translated-port>22</translated-port>
+                    <translated-address>10.10.10.40</translated-address>
+                  </destination-translation>
+                  <to>
+                    <member>Untrust</member>
+                  </to>
+                  <from>
+                    <member>Untrust</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>10.10.1.20</member>
+                  </destination>
+                  <service>Bastion-Host-SSH</service>
+                </entry>
+                <entry name="Outbound NAT">
+                  <source-translation>
+                    <dynamic-ip-and-port>
+                      <interface-address>
+                        <interface>ethernet1/1</interface>
+                      </interface-address>
+                    </dynamic-ip-and-port>
+                  </source-translation>
+                  <to>
+                    <member>Untrust</member>
+                  </to>
+                  <from>
+                    <member>Spoke</member>
+                    <member>Trust</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <service>any</service>
+                </entry>
+              </rules>
+            </nat>
+            <default-security-rules>
+              <rules>
+                <entry name="interzone-default">
+                  <action>deny</action>
+                  <log-start>yes</log-start>
+                  <log-end>yes</log-end>
+                </entry>
+              </rules>
+            </default-security-rules>
+          </rulebase>
           <import>
             <network>
               <interface>

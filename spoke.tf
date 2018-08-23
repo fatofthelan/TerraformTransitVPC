@@ -39,6 +39,10 @@ resource "aws_subnet" "spoke_vpc_subnet_az1" {
 /* Create the spoke VPC route table */
 resource "aws_route_table" "spoke_route_table" {
   vpc_id = "${aws_vpc.spoke_vpc.id}"
+
+  tags {
+    "Name" = "Spoke"
+  }
 }
 
 /* Associate spoke subnet with spoke routes */

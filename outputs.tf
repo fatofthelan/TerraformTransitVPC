@@ -22,6 +22,10 @@ output "Firewall 2 Management URL" {
   value = "${join("", list("https://", "${aws_eip.firewall_2_management_public_ip.public_ip}"))}"
 }
 
+output "Command to connect to Bastion Host" {
+  value = "${join("", list("ssh -i keys/transit-vpc-key -p 221 ec2-user@", "${aws_eip.firewall_1_untrust_public_ip.public_ip}"))}"
+}
+
 /* Debugging Outputs - Uncomment if needed.
 
 output "Firewall 1 Management EIP" {
