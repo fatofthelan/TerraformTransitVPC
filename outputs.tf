@@ -14,6 +14,10 @@ output "Spoke Host Private IP Address" {
   value = "${join("", list("IP:", "${aws_instance.spoke_host.private_ip}"))}"
 }
 
+output "Firewall Credentials" {
+  value = "Username/Password: paloalto/in*4ksh8JN2kdh"
+}
+
 /* Debugging Outputs - Uncomment if needed.
 output "FW1_Tunnel_1_Pre_Shared_Key" {
   value = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel1_preshared_key}"
