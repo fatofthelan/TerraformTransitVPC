@@ -1,0 +1,54 @@
+#!/bin/bash
+### Checking for Firewall 2 to become available ###
+while true
+do
+  echo "${fw2_mgmt_ip}" >> pan.log
+  resp=$(curl -vvv -s -S -g --insecure "https://${fw2_mgmt_ip}")
+  exit_code=$?
+  if [ $exit_code -ne 0 ] ; then
+    echo "Waiting..." >> pan.log
+    echo "Waiting for Firewall 2 to start..."
+  else
+    echo "Firewall 2 has started!"
+    break
+  fi
+  echo "Response $exit_code"
+  sleep 10s
+done
+for i in `seq 1 30`
+do
+sleep 5
+echo "Waiting for Firewall 2 API to start... "
+done
+
+### Push configuration to Firewall 2, load it to the candidate config, push IKE Gateway PSK's, and commit ###
+### Thanks, Kyle Creason for the API help ###
+
+### Generate API Key - Not needed if using included config template ###
+### curl -k -X GET 'https://${fw2_mgmt_ip}/api/?type=keygen&user=paloalto&password=in*4ksh8JN2kdh'
+
+### Import Full Config ###
+echo "Importing Firewall 2 configuration file..."
+curl -k --form file=@templates/transit_fw2_config.xml 'https://${fw2_mgmt_ip}/api/?type=import&category=configuration&key=LUFRPT1DTE1nSTdaaUhJS3ZSZXVWMk1SaFYvdW1CalE9ZHhLNktMRVBndzRVT2RvVjNOWXBGZjF0Z29hYmp0OTd2VDZ2VmNWc216TT0='
+
+### Load New Config ###
+echo "Loading Firewall 2 configuration file..."
+curl -k 'https://${fw2_mgmt_ip}/api/?type=op&cmd=<load><config><from>transit_fw2_config.xml</from></config></load>&key=LUFRPT1DTE1nSTdaaUhJS3ZSZXVWMk1SaFYvdW1CalE9ZHhLNktMRVBndzRVT2RvVjNOWXBGZjF0Z29hYmp0OTd2VDZ2VmNWc216TT0='
+
+### Enter PSK for Tunnel 1 ###
+echo "Setting Firewall 2, Tunnle 1 PSK..."
+curl -g -k "https://${fw2_mgmt_ip}/api/?type=config&action=set&xpath=/config/devices/entry[@name='localhost.localdomain']/network/ike/gateway/entry[@name='aws-transit-gateway-01']/authentication/pre-shared-key&element=<key>${tunnel1_preshared_key}</key>&key=LUFRPT1DTE1nSTdaaUhJS3ZSZXVWMk1SaFYvdW1CalE9ZHhLNktMRVBndzRVT2RvVjNOWXBGZjF0Z29hYmp0OTd2VDZ2VmNWc216TT0="
+
+### Enter PSK for Tunnel 2 ###
+echo "Setting Firewall 2, Tunnle 2 PSK..."
+curl -g -k "https://${fw2_mgmt_ip}/api/?type=config&action=set&xpath=/config/devices/entry[@name='localhost.localdomain']/network/ike/gateway/entry[@name='aws-transit-gateway-02']/authentication/pre-shared-key&element=<key>${tunnel2_preshared_key}</key>&key=LUFRPT1DTE1nSTdaaUhJS3ZSZXVWMk1SaFYvdW1CalE9ZHhLNktMRVBndzRVT2RvVjNOWXBGZjF0Z29hYmp0OTd2VDZ2VmNWc216TT0="
+
+### Commit Changes to FW ###
+echo "Committing changes to Firewall 2..."
+curl -k 'https://${fw2_mgmt_ip}/api/?type=commit&cmd=<commit></commit>&key=LUFRPT1DTE1nSTdaaUhJS3ZSZXVWMk1SaFYvdW1CalE9ZHhLNktMRVBndzRVT2RvVjNOWXBGZjF0Z29hYmp0OTd2VDZ2VmNWc216TT0='
+
+echo "Firewall 2 configuration is finished!"
+echo "Firewall 2 credentials:"
+echo "Username: paloalto"
+echo "Password: in*4ksh8JN2kdh"
+exit 0

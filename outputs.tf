@@ -1,21 +1,5 @@
-output "FW1_Tunnel_1_Pre_Shared_Key" {
-  value = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel1_preshared_key}"
-}
-
-output "FW1_Tunnel_2_Pre_Shared_Key" {
-  value = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel2_preshared_key}"
-}
-
 output "Firewall 1 Management URL" {
   value = "${join("", list("https://", "${aws_eip.firewall_1_management_public_ip.public_ip}"))}"
-}
-
-output "FW2_Tunnel_1_Pre_Shared_Key" {
-  value = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel1_preshared_key}"
-}
-
-output "FW2_Tunnel_2_Pre_Shared_Key" {
-  value = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel2_preshared_key}"
 }
 
 output "Firewall 2 Management URL" {
@@ -26,7 +10,26 @@ output "Command to connect to Bastion Host" {
   value = "${join("", list("ssh -i keys/transit-vpc-key -p 221 ec2-user@", "${aws_eip.firewall_1_untrust_public_ip.public_ip}"))}"
 }
 
+output "Spoke Host Private IP Address" {
+  value = "${join("", list("IP:", "${aws_instance.spoke_host.private_ip}"))}"
+}
+
 /* Debugging Outputs - Uncomment if needed.
+output "FW1_Tunnel_1_Pre_Shared_Key" {
+  value = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel1_preshared_key}"
+}
+
+output "FW1_Tunnel_2_Pre_Shared_Key" {
+  value = "${aws_vpn_connection.spoke_to_transit_fw1.tunnel2_preshared_key}"
+}
+
+output "FW2_Tunnel_1_Pre_Shared_Key" {
+  value = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel1_preshared_key}"
+}
+
+output "FW2_Tunnel_2_Pre_Shared_Key" {
+  value = "${aws_vpn_connection.spoke_to_transit_fw2.tunnel2_preshared_key}"
+}
 
 output "Firewall 1 Management EIP" {
   value = "${aws_eip.firewall_1_management_public_ip.public_ip}"

@@ -1,0 +1,7 @@
+*terraform*
+*.terraform*
+.git
+keys/transit-vpc-key*
+pan.log
+templates/*.xml
+templates/*.sh
