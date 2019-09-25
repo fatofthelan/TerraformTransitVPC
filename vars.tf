@@ -10,7 +10,7 @@ https://www.paloaltonetworks.com/documentation/global/compatibility-matrix/vm-se
 */
 
 variable "palo_alto_fw_ami" {
-  type = "map"
+  type = map(string)
 
   default = {
     "us-east-1"      = "ami-bffd3cc2"
@@ -52,7 +52,8 @@ variable "transit_vpc_cidr_prefix" {
 }
 
 /* Discover and create a list of the Availability Zones for our region. */
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+}
 
 /* Create a list of Bastion Host AMI's for Amazon Linux 2 */
 data "aws_ami" "amazon-linux-2" {
@@ -74,3 +75,4 @@ data "aws_ami" "amazon-linux-2" {
     values = ["x86_64"]
   }
 }
+
