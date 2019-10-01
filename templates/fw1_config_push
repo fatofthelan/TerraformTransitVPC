@@ -45,7 +45,7 @@ curl -g -k "https://${fw1_mgmt_ip}/api/?type=config&action=set&xpath=/config/dev
 
 ### Commit Changes to FW ###
 echo "Committing changes to Firewall 1..."
-curl -k 'https://${fw1_mgmt_ip}/api/?type=commit&cmd=<commit></commit>&key=LUFRPT1DTE1nSTdaaUhJS3ZSZXVWMk1SaFYvdW1CalE9ZHhLNktMRVBndzRVT2RvVjNOWXBGZjF0Z29hYmp0OTd2VDZ2VmNWc216TT0='
+curl -k 'https://${fw1_mgmt_ip}/api/?type=commit&cmd=<commit><force></force></commit>&key=LUFRPT1DTE1nSTdaaUhJS3ZSZXVWMk1SaFYvdW1CalE9ZHhLNktMRVBndzRVT2RvVjNOWXBGZjF0Z29hYmp0OTd2VDZ2VmNWc216TT0='
 
 echo "Firewall 1 configuration is finished!"
 echo "Firewall 1 credentials:"
