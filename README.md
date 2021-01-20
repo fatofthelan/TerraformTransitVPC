@@ -1,5 +1,6 @@
 ### AWS Transit VPC (and Spoke VPC) Terraform Template
-This is the first draft of the AWS Transit VPC/Subscribing VPC Terraform templates.
+Welcome to my example of the AWS Transit VPC/Subscribing VPC Terraform templates.
+![Network Diagram](Transit-VPC-Network-Diagram.jpg "Network Diagram")
 
 #### This Terraform template will:
 - Create the Transit VPC and Subscribing (Spokes) VPCs.
